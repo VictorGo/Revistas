@@ -1,0 +1,254 @@
+//Víctor Gómez · Maestría en Diseño · Fundamentos 1
+
+//Estoy haciendo un gráfico sobre las Calificación de las Revistas Indexadas en Colombia según Colciencias (A1, A2, B, C))
+
+
+//Mi tabla:
+//Categoria, "Ciencias naturales y exactas", "Ingeniería y tecnología", "Ciencias médicas y de la salud", "Ciencias agrícolas","Ciencias Sociales","Humanidades","Multidisciplinarias"
+//A1,9,7,7,8,4,1,0
+//A2,30,19,30,33,19,26,16
+//B,25,17,22,29,24,32,9
+//C,36,57,41,29,53,40,75
+
+
+Table revistas;
+Table tabla;
+
+float diametro0, diametro1, diametro2, diametro3;
+int cargarev;
+int filas;
+int columnas;
+String s = "The quick brown fox jumped over the lazy dog.";
+int diamMap=400;
+PFont fuente;
+
+String mensaje = "Revistas indexadas en Publindex según área de la ciencia y la tecnología OCDE, 2013";
+String  categoria;
+
+PFont f;
+float r = 360;
+
+int icono = 0;
+
+//Imágnes
+PImage img1;
+PImage img2;
+PImage img3;
+PImage img4;
+PImage img5;
+PImage img6;
+PImage img7;
+
+
+
+
+void setup() {
+  //Tamaño del lienzo
+  size(1920, 1080);
+  background(0);
+  //Aquí cargo la tabla .csv y señalo que hay un encabezado
+  revistas = loadTable("revistas.csv", "header");
+  fuente = loadFont("AvenirNext-UltraLight-100.vlw");
+  tabla = loadTable("porcentaje.csv", "header");
+
+  smooth();
+  f = createFont("Avenir", 20, true);
+  textFont(f);
+  // Para centrar el texto
+  textAlign(CENTER);
+  smooth();
+}
+
+void draw() { 
+  convenciones();
+  smooth();
+  arcos();
+  rotulos();
+  textos1();
+
+  textocurva();
+  fill(255);
+  imagenes();
+}
+
+void imagenes() {
+  img1 = loadImage("ciencias_agricolas.png");
+  image(img1, -200, -50);
+
+  img2 = loadImage("ciencias_sociales.png");
+  image(img2, -133, -170);
+
+  img3 = loadImage("humanidades.png");
+  image(img3, -5, -190);
+
+  img4 = loadImage("multidisciplinarias.png");
+  image(img4, 120, -106);
+
+  img5 = loadImage("ciencias_naturales.png");
+  image(img5, 120, 30);
+
+
+  img6 = loadImage("ingenieria.png");
+  image(img6, 10, 120);
+
+  img7 = loadImage("ciencias_medicas.png");
+  image(img7, -133, 80);
+}
+
+void textos1 () {
+
+  for (TableRow row : tabla.rows()) {
+
+    int id = row.getInt("id");
+    String c1 = row.getString("1");
+    String c2 = row.getString("2");
+
+
+    fill(0);
+    text(c1, 960 + (id*50), 530+(id*50));
+    text(c2, 910 + (id*30), 550+(id*50));
+  }
+}
+
+
+void convenciones() {
+  smooth();
+  textSize(15);
+  fill(0, 255, 194);
+
+  //A1
+  fill(100, 171, 48);
+  text("A1", 1420, 220);
+  ellipse (1420, 185, 20, 20);
+  //A2
+  fill(0, 214, 79);
+  text("A2", 1480, 220);
+  ellipse (1480, 185, 20, 20);
+  //B
+  fill(68, 157, 59);
+  text("B", 1540, 220);
+
+  ellipse (1540, 185, 20, 20);
+  //C
+  fill(0, 182, 141);
+  text("C", 1600, 220);
+  ellipse (1600, 185, 20, 20);
+} 
+
+void rotulos() {
+  textSize(15);
+  fill(0, 255, 194);
+  text("Ciencias sociales", 600, 250);
+  text("Ciencias naturales y exactas", 1430, 747);
+  text("Ingeniería y tecnología", 1160, 930);
+  text("Ciencias médicas y de la salud", 585, 818);
+  text("Ciencias agrícolas", 450, 530);
+  text("Humanidades", 1060, 162);
+  text("Multidisciplinarias", 1400, 390);
+
+  smooth();
+}
+
+void arcos() {
+
+  //Este For hace un nombramiento de filas y columnas
+  for (int recCol=0; recCol<7; recCol++) {
+
+    //A1.............................
+    cargarev = revistas.getInt (0, recCol+1);
+    diametro0 = map (cargarev, 0, 100, 100, diamMap);
+    //Color de los arcos
+    fill (255, 237, 0, 50);
+
+
+    //arc (x, y, c, d, ángulo)
+    //Arcos, se crean desde la mitad del ancho, la mitad del alto y los valores c, d, que son el mismo diámetro, y los ángulos, que son 2PI dividido en 7 por que tengo 7 temas en la tabla 
+    arc (width/2, height/2, diametro0, diametro0, recCol*2*PI/7, recCol*2*PI/7+2*PI/7, PIE);
+    println(recCol);
+
+
+    //A2..........................
+    fill(255, 0, 0, 50);
+    cargarev = revistas.getInt (1, recCol+1);
+    diametro1 = map (cargarev, 0, 100, 100, diamMap)+diametro0;
+
+    //Arcos, se crean desde la mitad del ancho, la mitad del alto y los valores c, d, que son el mismo diámetro, y los ángulos, que son 2PI dividido en 7 por que tengo 7 temas en la tabla 
+    arc (width/2, height/2, diametro1, diametro1, recCol*2*PI/7, recCol*2*PI/7+2*PI/7, PIE);
+    println(recCol);
+
+    //B..........................
+    fill(0, 255, 0, 50);
+    cargarev = revistas.getInt (2, recCol+1);
+    diametro2 = map (cargarev, 0, 100, 100, diamMap)+diametro1;
+
+    //Arcos, se crean desde la mitad del ancho, la mitad del alto y los valores c, d, que son el mismo diámetro, y los ángulos, que son 2PI dividido en 7 por que tengo 7 temas en la tabla 
+    arc (width/2, height/2, diametro2, diametro2, recCol*2*PI/7, recCol*2*PI/7+2*PI/7, PIE);
+
+
+    //C..........................
+    fill(0, 185, 145, 50);
+    cargarev = revistas.getInt (3, recCol+1);
+    diametro3 = map (cargarev, 0, 100, 100, diamMap)+diametro2;
+
+    //Arcos, se crean desde la mitad del ancho, la mitad del alto y los valores c, d, que son el mismo diámetro, y los ángulos, que son 2PI dividido en 7 por que tengo 7 temas en la tabla 
+    arc (width/2, height/2, diametro3, diametro3, recCol*2*PI/7, recCol*2*PI/7+2*PI/7, PIE);
+    stroke (255);
+
+    //int xpos = int(width/2 + diametro3/2 * cos(recCol*2* PI));
+    //int ypos = int(height/2 + diametro3/2 * sin(recCol*2* PI));
+
+    //String porcentajes =  "111111 %";
+    //fill(0, 0, 0);
+    //textAlign(LEFT);
+    //textSize(15);
+    //text(porcentajes, xpos, ypos, 600, 100);
+    //smooth();
+
+
+    //Esta elipse es la blanca que hace un hueco en el centro de la gráfica
+    fill (255);
+    ellipse (width/2, height/2, 100, 100);
+  }
+}
+
+
+void textocurva () {
+  // Comienza en el centro y se dibuja el círculo
+  translate(width / 2, height / 2);
+  noFill();
+  stroke(255);
+  strokeWeight(4);
+  ellipse(0, 0, 700, 700);
+
+  // Tenemos que hacer un seguimiento de nuestra posición a lo largo de la curva
+  float arclength = 0;
+
+  // Por cada caja
+  for (int i = 0; i < mensaje.length(); i++)
+  {
+    // En lugar de una anchura constante, comprobamos la anchura de cada carácter.
+    char currentChar = mensaje.charAt(i);
+    float w = textWidth(currentChar);
+
+    // Cada cuadro se centra por lo que avanzamos la mitad del ancho
+    arclength += w/2;
+    // Ángulo en radianes es la longitud de arco dividido por el radio
+    // Empezando por el lado izquierdo del círculo mediante la adición de PI
+    float theta = PI + arclength / r;    
+
+    pushMatrix();
+    // Polar a la conversión de coordenadas cartesianas
+    translate(r*cos(theta), r*sin(theta));
+    // Rotar la caja
+    rotate(theta+PI/2); // rotation is offset by 90 degrees
+
+    // Mostrar el carácter
+    fill(255);
+    text(currentChar, 0, 0);
+    smooth();
+    popMatrix();
+    // Mover la mitad de nuevo
+    arclength += w/2;
+    smooth();
+  }
+}
